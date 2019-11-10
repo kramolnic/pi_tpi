@@ -30,6 +30,8 @@ For this demo, connect an ATTiny10 in the following way:
  GPIO 2 -> RESET
  GPIO 3 -> TPICLK
  GPIO 4 { optional 100 - 1k ohm resistor } TPIDAT 
+ 5v     -> VCC
+ Ground -> GND
 ```
 
 Of course, you may hook it up however you want, but as a warning, if you do hook it up significantly differently, RESET and TPIDAT may require pull-up resistors.
