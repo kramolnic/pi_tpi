@@ -10,7 +10,7 @@
 #include <fcntl.h>
 
 static int gpiofd;
-static int32_t * gpiomem;
+static uint32_t * gpiomem;
 
 //Based on http://www.pieter-jan.com/node/15
 
@@ -28,9 +28,9 @@ int InitGenGPIO()
     }
 
 	//map a page of memory to gpio at offset 0x20200000 which is where GPIO goodnessstarts
-	gpiomem = (int32_t *)mmap(0, pagesize, PROT_READ|PROT_WRITE, MAP_SHARED, gpiofd, 0 );
+	gpiomem = (uint32_t*)mmap(0, pagesize, PROT_READ|PROT_WRITE, MAP_SHARED, gpiofd, 0 );
 
-	if (gpiomem < 0)
+	if (gpiomem == MAP_FAILED)
 	{
 		printf("Mmap (GPIO) failed: %s\n", strerror(errno));
 		gpiomem = 0;
