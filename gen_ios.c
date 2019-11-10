@@ -9,11 +9,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define BCM2708_PERI_BASE       0x3F000000
-#define GPIO_BASE                         (BCM2708_PERI_BASE + 0x200000)
-
 static int gpiofd;
-static uint32_t * gpiomem;
+static int32_t * gpiomem;
 
 //Based on http://www.pieter-jan.com/node/15
 
@@ -22,7 +19,7 @@ int InitGenGPIO()
 	int pagesize = getpagesize();
 
 	//Obtain handle to physical memory
-	if ((gpiofd = open ("/dev/mem", O_RDWR | O_SYNC) ) < 0)
+	if ((gpiofd = open ("/dev/gpiomem", O_RDWR | O_SYNC) ) < 0)
 	{
 		fprintf( stderr, "Unable to open /dev/mem: %s\n", strerror(errno));
 		gpiomem = 0;
@@ -31,9 +28,9 @@ int InitGenGPIO()
     }
 
 	//map a page of memory to gpio at offset 0x20200000 which is where GPIO goodnessstarts
-	gpiomem = (uint32_t *)mmap(0, pagesize, PROT_READ|PROT_WRITE, MAP_SHARED, gpiofd, GPIO_BASE );
+	gpiomem = (int32_t *)mmap(0, pagesize, PROT_READ|PROT_WRITE, MAP_SHARED, gpiofd, 0 );
 
-	if ((int32_t)gpiomem < 0)
+	if (gpiomem < 0)
 	{
 		printf("Mmap (GPIO) failed: %s\n", strerror(errno));
 		gpiomem = 0;
